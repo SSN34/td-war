@@ -1,6 +1,6 @@
 //consts
-WIDTH = 960;
-HEIGHT = 480;
+const WIDTH = 960;
+const HEIGHT = 480;
 
 let canvas = document.getElementsByTagName("canvas")[0];
 canvas.height = HEIGHT;
@@ -10,6 +10,13 @@ Draw.ctx = canvas.getContext("2d");
 
 let tank = new Image();
 tank.src = "./images/tank.png";
+
+let r = new Image();
+r.src = "./images/r.png";
+
+
+let corner = new Image();
+corner.src = "./images/corner.png";
 
 window.addEventListener("load", () => {
     console.log("ye");
@@ -23,18 +30,25 @@ let currentFrame = 0;
 
 let speed = 0.1;
 
+
+
 function runSprite() {
     Draw.ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-    Draw.ctx.drawImage(tank, 64 * currentFrame, 0, 64, 64, 50, HEIGHT - 80 + speed, 64, 64);
+    for(let i = 0; i < WIDTH; i += 64){
+        Draw.ctx.drawImage(r, i, 0);
+    }
 
-    speed-= 1;
+    Draw.ctx.drawImage(corner, WIDTH - 64, 0);
+
+    Draw.ctx.drawImage(tank, 64 * currentFrame, 0, 64, 64, 50, 0, 64, 64);
+
     requestAnimationFrame(runSprite);
 }
 
 function updateCurrentFrame(){
     currentFrame++;
-    if(currentFrame == 6){
+    if(currentFrame == 4){
         currentFrame = 0;
     }
 }
