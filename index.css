@@ -1,9 +1,56 @@
-canvas{
-    border: 1px dashed lightslategrey;
-    zoom: 1;
-}
-
 body{
     padding: 0px;
     margin: 0px;
+    align-items: center;
+}
+
+#title{
+    background-color: brown;
+    color: antiquewhite;
+    width: 1060px;
+    padding: 10px;
+    text-align: center;
+    font-size: 40px;
+    font-family: 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#controls{
+    background-color: #222;
+    width: 120px;
+    height: 480px;
+    padding-top: 20px;
+    align-items: center;
+}
+
+.item{
+    width: 110px;
+    display: flex;
+    justify-content: center;
+    gap:5px;
+}
+
+.item-value{
+    color: #ffb820;
+    align-self: center;
+    font-family: 'Franklin Gothic Medium';
+}
+
+.weapon{
+    margin-top: 10px;
+    gap: 0;
+    justify-content: left;
+}
+
+#game{
+    display: flex;
+}
+
+.selected{
+    border: 5px solid rgba(255, 0, 0, 0.4);
+    background-color: rgba(255,0,0,0.2);
+}
+
+#title span{
+    font-size: 16px;
+    color: black;
 }
