@@ -6,11 +6,17 @@ let canvas = document.getElementsByTagName("canvas")[0];
 canvas.height = HEIGHT;
 canvas.width = WIDTH;
 
+let lifeEl = document.getElementById('life');
+
+
 Game.init(canvas.getContext("2d"));
 
 Game.load();
 
 window.addEventListener("load", () => {
+
+    Game.createLevels();
+
     console.log("Game Started!!!, Hope you enjoy this :)");
 
     let weapons = document.getElementsByClassName("weapon");
@@ -35,6 +41,11 @@ function run(){
 
     Game.ctx.clearRect(0,0,WIDTH, HEIGHT);
     Game.drawLevel();
+
+    lifeEl.innerText = Game.life;
+    if(Game.life < 1){
+        return;
+    }
 
     requestAnimationFrame(run);
 }
