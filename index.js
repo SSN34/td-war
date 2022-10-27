@@ -46,9 +46,38 @@ function run(){
     lifeEl.innerText = Game.life;
 
     walletEl.innerText = Game.coins;
+
+    if(Game.levels[Game.currentLevel].ants.filter(x => x.visible).length == 0){
+        youWon();
+        return;
+    }
+
     if(Game.life < 1){
+        gameOver();
         return;
     }
 
     requestAnimationFrame(run);
+}
+
+function gameOver(){
+    Game.ctx.globalAlpha = 0.8;
+    Game.ctx.fillRect(0,0,WIDTH, HEIGHT);
+    Game.ctx.globalAlpha = 1;
+
+    Game.ctx.font = "italic 200px Copperplate, Papyrus, fantasy, monospace";
+    Game.ctx.fillStyle = "white";
+    Game.ctx.fillText("Game", 50, (HEIGHT / 2) - 50);
+    Game.ctx.fillText("Over", 400, HEIGHT - 80);
+}
+
+function youWon(){
+    Game.ctx.globalAlpha = 0.8;
+    Game.ctx.fillStyle = "white";
+    Game.ctx.fillRect(0,0,WIDTH, HEIGHT);
+    Game.ctx.globalAlpha = 1;
+
+    Game.ctx.font = "italic 200px Copperplate, Papyrus, fantasy, monospace";
+    Game.ctx.fillStyle = "green";
+    Game.ctx.fillText("Winner", 125, (HEIGHT / 2) + 50);
 }
