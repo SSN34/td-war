@@ -1,4 +1,3 @@
-
 class Ant {
     constructor(image, strength, position, speed, path) {
         this.image = image;
@@ -16,7 +15,7 @@ class Ant {
     }
 
     drawAnt(context) {
-        if(!this.visible){
+        if (!this.visible) {
             return;
         }
         context.save();
@@ -41,7 +40,11 @@ class Ant {
     }
 
     updatePosition() {
-        if(this.currentSection === this.path.length){
+        if (this.strength < 0) {
+            this.visible = false;
+            return;
+        }
+        if (this.currentSection === this.path.length && this.visible) {
             this.position.x = 0;
             this.position.y = 96;
             this.currentSection = 0;
@@ -114,8 +117,40 @@ class Weapon {
 }
 
 class Gun extends Weapon {
-    constructor(image, position, range, power) {
+    constructor(image, position, range, power, targets, cost) {
         super(image, position, range);
         this.power = power;
+        this.targets = targets;
+        this.cost = cost;
+        setInterval(() => this.shootTarget(), 100);
+    }
+
+    shootTarget() {
+
+        for(let target in this.targets){
+            if(this.targets[target]){
+                Game.levels[Game.currentLevel].ants[target].strength -= this.power;
+                if(Game.levels[Game.currentLevel].ants[target].strength < 0){
+                    Game.coins += 20;
+                }
+                break;
+            }
+        }
+
+       
+    }
+
+    drawWeaponAction(context){
+        for(let target in this.targets){
+            if(this.targets[target]){
+                context.strokeStyle = "red";
+                context.lineWidth = 1;
+                context.beginPath();
+                context.moveTo(this.position.x + 32, this.position.y + 32);
+                context.lineTo(Game.levels[Game.currentLevel].ants[target].position.x, Game.levels[Game.currentLevel].ants[target].position.y);
+                context.stroke();
+                break;
+            }
+        }
     }
 }

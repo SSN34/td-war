@@ -5,6 +5,7 @@ const Game = {
     ants: [],
     guns: [],
     life: 10,
+    coins: 100,
     drawGunRange: true,
     hoverBox: {
         visible: false,
@@ -18,6 +19,24 @@ const Game = {
 
 Game.init = function (context) {
     this.ctx = context;
+};
+
+Game.isValidGridIndex = function (event) {
+    let rect = canvas.getBoundingClientRect();
+
+    let pos = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+    };
+
+    let index = {
+        x: parseInt(pos.x / 64),
+        y: parseInt(pos.y / 64),
+    };
+
+    return this.levels[this.currentLevel].levelGrid[index.y][index.x] == 1
+        ? index
+        : undefined;
 };
 
 Game.load = function () {
@@ -39,31 +58,43 @@ Game.load = function () {
         let image = new Image();
         image.src = x;
 
-        this.guns.push(new Gun(image, { x: 64, y: 0 }, 64, 10));
+        this.guns.push(image);
     });
 
     canvas.addEventListener("mousemove", (event) => {
         if (!this.hoverBox.visible) {
             return;
         }
-        let rect = canvas.getBoundingClientRect();
 
-        let pos = {
-            x: event.clientX - rect.left,
-            y: event.clientY - rect.top,
-        };
+        let validGridIndex = this.isValidGridIndex(event);
 
-        let index = {
-            x: parseInt(pos.x / 64),
-            y: parseInt(pos.y / 64),
-        };
-
-        if (this.levels[this.currentLevel].levelGrid[index.y][index.x] == 1) {
-            this.hoverBox.position.x = 64 * index.x;
-            this.hoverBox.position.y = 64 * index.y;
+        if (validGridIndex) {
+            this.hoverBox.position.x = 64 * validGridIndex.x;
+            this.hoverBox.position.y = 64 * validGridIndex.y;
         } else {
             this.hoverBox.position.x = -500;
             this.hoverBox.position.y = -500;
+        }
+    });
+
+    canvas.addEventListener("click", (event) => {
+        let validGridIndex = this.isValidGridIndex(event);
+
+        let weapons = document.getElementsByClassName("weapon");
+
+        [...weapons].forEach((x) => {
+                x.classList.remove("selected");
+        });
+
+        if (this.hoverBox.visible && validGridIndex) {
+            if(this.coins >= 100){
+                let gun = new Gun(this.guns[0],{ x: validGridIndex.x * 64, y: validGridIndex.y * 64 }, 200, 10, new Array(this.levels[this.currentLevel].ants.length).fill(false), 100);
+                this.levels[this.currentLevel].levelGrid[validGridIndex.y][validGridIndex.x] = 0;
+                this.levels[this.currentLevel].activeGuns.push(gun);
+                this.coins -= 100;
+            }
+            this.hoverBox.visible = false;
+            this.hoverBox.position = {x : -500, y: -500}
         }
     });
 };
@@ -103,11 +134,11 @@ Game.createLevels = function () {
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             ],
             ants: [],
+            activeGuns: [],
         },
     ];
 
-    
-    new Array(10).fill(0).forEach((item, i) => {
+    new Array(20).fill(0).forEach((item, i) => {
         let ant = new Ant(Game.ants[0], 100, { x: -50 * i, y: 96 }, 3, [
             "R-862",
             "B-416",
@@ -116,9 +147,9 @@ Game.createLevels = function () {
             "L-98",
             "B-416",
             "R-520",
-        ])
-        this.levels[0].ants.push(ant)
-    })
+        ]);
+        this.levels[0].ants.push(ant);
+    });
 };
 
 Game.drawLevel = function () {
@@ -130,10 +161,24 @@ Game.drawLevel = function () {
         this.drawHoverBox();
     }
 
-    this.levels[this.currentLevel].ants.forEach(x => {
-        x.drawAnt(this.ctx)
-        x.updatePosition();
+    this.levels[this.currentLevel].ants.forEach((x, i) => {
+        x.drawAnt(this.ctx);
+        x.updatePosition(); 
+        this.levels[this.currentLevel].activeGuns.forEach((gun) => {
+            if(gun.range >= getDistance(gun.position.x, gun.position.y, x.position.x, x.position.y) && x.visible){
+                gun.targets[i] = true;
+            }else{
+                gun.targets[i] = false;
+            }
+        });   
     });
 
-
+    this.levels[this.currentLevel].activeGuns.forEach((x) => {
+        x.drawWeapon(this.ctx);
+        x.drawWeaponAction(this.ctx);
+    });
 };
+
+function getDistance(x1,y1,x2,y2){
+    return Math.pow(Math.pow(x2-x1, 2) + Math.pow(y2 - y1, 2), 1/2);
+}

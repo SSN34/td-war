@@ -7,6 +7,7 @@ canvas.height = HEIGHT;
 canvas.width = WIDTH;
 
 let lifeEl = document.getElementById('life');
+let walletEl = document.getElementById('wallet');
 
 
 Game.init(canvas.getContext("2d"));
@@ -43,6 +44,8 @@ function run(){
     Game.drawLevel();
 
     lifeEl.innerText = Game.life;
+
+    walletEl.innerText = Game.coins;
     if(Game.life < 1){
         return;
     }
