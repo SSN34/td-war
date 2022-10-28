@@ -152,7 +152,59 @@ Game.createLevels = function () {
     });
 
     new Array(10).fill(0).forEach((item, i) => {
-        let ant = new Ant(Game.ants[1], 150, { x: -50 * (i + 30), y: 96 }, 3, [
+        let ant = new Ant(Game.ants[0], 100, { x: -50 * (i + 30), y: 96 }, 4, [
+            "R-862",
+            "B-416",
+            "L-740",
+            "T-224",
+            "L-98",
+            "B-416",
+            "R-520",
+        ]);
+        this.levels[0].ants.push(ant);
+    });
+
+    new Array(10).fill(0).forEach((item, i) => {
+        let ant = new Ant(Game.ants[0], 100, { x: -50 * (i + 60), y: 96 }, 5, [
+            "R-862",
+            "B-416",
+            "L-740",
+            "T-224",
+            "L-98",
+            "B-416",
+            "R-520",
+        ]);
+        this.levels[0].ants.push(ant);
+    });
+
+    new Array(10).fill(0).forEach((item, i) => {
+        let ant = new Ant(Game.ants[1], 150, { x: -50 * (i + 90), y: 96 }, 3, [
+            "R-862",
+            "B-416",
+            "L-740",
+            "T-224",
+            "L-98",
+            "B-416",
+            "R-520",
+        ]);
+        this.levels[0].ants.push(ant);
+    });
+
+    new Array(10).fill(0).forEach((item, i) => {
+        let ant = new Ant(Game.ants[1], 150, { x: -50 * (i + 120), y: 96 }, 4, [
+            "R-862",
+            "B-416",
+            "L-740",
+            "T-224",
+            "L-98",
+            "B-416",
+            "R-520",
+        ]);
+        this.levels[0].ants.push(ant);
+    });
+
+    new Array(10).fill(0).forEach((item, i) => {
+        let ant = new Ant(Game.ants[1], 150, { x: -50 * (i + 150), y: 96 }, 5, [
             "R-862",
             "B-416",
             "L-740",
